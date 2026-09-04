@@ -1,0 +1,11 @@
+# 补丁 3.2：修正官方文档化的 meeting.rooms.search 入参名。
+# 官方文档沿用了 CLI 1.2.0 之前的旧参数名，4 个过滤参数错了 3 个。
+# 权威依据：wecom-cli 1.2.0 `wecom-cli meeting rooms search --schema`（只读）。
+# 传错名不会报错，会被后端忽略 → 过滤条件静默失效 → 订错房。
+# 格式：<旧写法><TAB><新写法>；按文件内出现顺序自上而下逐条替换，复合写法必须排在单 token 之前。
+# 注意：building_name 与 floor_name 在 1.2.0 仍然正确，不在本表内。
+`building_city/name`	`city_name` / `building_name`
+building_city/name	city_name / building_name
+building_city	city_name
+room_keyword	room_name
+min_capacity	capacity_min

@@ -1,0 +1,4 @@
+# 补丁 3.1：把 vendor 技能里指向官方公共技能的引用改到我方自维护的公共技能。
+# 官方 wecomcli-shared 与我方 wecom-shared 会产生互斥指令，详见 scripts/vendor-official-skills.sh 顶部说明。
+# 格式：<上游标识><TAB><替换为>
+wecomcli-shared	wecom-shared

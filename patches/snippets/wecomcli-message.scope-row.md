@@ -1,0 +1,2 @@
+- 适用于以**授权人本人身份**（非机器人身份）发送纯文本消息 —— `message send`，DesireCore 增补，见下方专节
+- 适用于按 `media_id` 把聊天消息里的图片 / 文件 / 语音 / 视频取回本地 —— `message files get`，DesireCore 增补，见下方专节

@@ -1,0 +1,23 @@
+# 补丁 3.3：补齐 DesireCore 需要的根级 frontmatter 字段。
+# DesireCore 的技能更新判定读 SKILL.md frontmatter 的根级 version（semver），缺失则更新判定完全失效。
+# 官方 14 个技能里只有 disk / email / media 声明了 version。
+# 脚本对每个字段「缺则补、有则不动」——上游若在未来自行声明了这些字段，以上游为准。
+# version 一律填 1.2.0（对齐 CLI 版本）；上游已声明的会被保留（disk=1.0.0 / email=2.1.0 / media=1.0.0）。
+# risk_level 判定口径：
+#   low    = 纯读，或写操作不产生任何对外可见结果
+#   medium = 有写操作，但仅增量/可人工回退，无删除、无覆盖、不推送给他人
+#   high   = 含对外可见（推送/授权给他人）或不可逆（删除/全量覆盖）的操作
+# 格式：<技能目录><TAB>version<TAB>risk_level<TAB>type<TAB>status<TAB><risk_level 判定理由>
+wecomcli-calendar	1.2.0	high	procedural	enabled	create/update/cancel 日程会向参与人推送通知，取消不可逆
+wecomcli-contact	1.2.0	low	procedural	enabled	仅 contact users search，纯读
+wecomcli-disk	1.2.0	medium	procedural	enabled	有 upload/rename/folders create，但明确不支持删除与覆盖上传，写面仅增量且可人工回退
+wecomcli-doc	1.2.0	high	procedural	enabled	contents overwrite 为不可逆全量覆盖正文
+wecomcli-doc-manage	1.2.0	high	procedural	enabled	members update / rules update 是授予他人文档访问权限，对外可见且撤回代价高
+wecomcli-email	1.2.0	high	procedural	enabled	send/reply/forward 邮件发出即不可撤回
+wecomcli-media	1.2.0	low	procedural	enabled	仅 media upload/download 搬运文件，upload 只产出 media_id，无任何对外可见结果
+wecomcli-meeting	1.2.0	high	procedural	enabled	create/update/cancel 在线会议会向参会人推送通知，取消不可逆
+wecomcli-message	1.2.0	high	procedural	enabled	消息发出即对收件人可见且不可撤回
+wecomcli-sheet	1.2.0	high	procedural	enabled	subsheets delete 删整张子表、contents update 覆盖写单元格，均为不可逆数据丢失
+wecomcli-smartpage	1.2.0	high	procedural	enabled	pages overwrite 为不可逆全量覆盖页面
+wecomcli-smartsheet	1.2.0	high	procedural	enabled	sheets/fields/records/views/charts 全套 delete，字段与子表删除为不可逆结构性数据丢失
+wecomcli-todo	1.2.0	high	procedural	enabled	创建人 delete 会让所有参与人一起失去该待办，不可逆；create 的 follower_ids 对外可见

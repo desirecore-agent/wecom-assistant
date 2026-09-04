@@ -1,0 +1,15 @@
+# 补丁 3.2 注记 + 补丁 3.4：把片段注入 vendor 技能。
+# 3.4 背景：官方 13 个技能覆盖 CLI 95 个方法中的 89 个，下面 3 个是我们需要而官方零覆盖的：
+#   message.send / message.files.get（wecomcli-message 只写了 message aibot send）
+#   doc.create（wecomcli-doc 刻意只走「生成 .docx → doc import」）
+# 片段参数已按 wecom-cli 1.2.0 的 `--schema` 逐字段核对，见各片段开头的说明。
+# 锚点用「定长子串」匹配而非整行相等，以免上游表格对齐空格变动导致误判；
+# 脚本要求锚点在目标文件中**恰好命中 1 行**，命中 0 或 >1 立即 fail closed。
+# 同一锚点的多条注入按本文件自上而下的顺序落位。
+# 格式：<片段文件><TAB><目标文件（相对 skills/）><TAB><before|after><TAB><锚点子串>
+wecomcli-calendar.param-fix-note.md	wecomcli-calendar/references/calendar-meeting-room.md	after	本文档是会议室查询的唯一信息源
+wecomcli-doc.routing-row.md	wecomcli-doc/SKILL.md	after	[+contents-overwrite](references/doc-contents-overwrite.md)
+wecomcli-doc.doc-create.md	wecomcli-doc/SKILL.md	before	## 跨技能依赖
+wecomcli-message.scope-row.md	wecomcli-message/SKILL.md	after	并给这些范围中的成员或群聊发送 Markdown 消息、图片、文件、AMR 语音或视频
+wecomcli-message.message-send.md	wecomcli-message/SKILL.md	before	## 关键约束
+wecomcli-message.message-files-get.md	wecomcli-message/SKILL.md	before	## 关键约束

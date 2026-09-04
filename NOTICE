@@ -1,0 +1,104 @@
+NOTICE
+======
+
+本仓库（DesireCore「企业微信助手」Agent 内容仓库）整体以 MIT 许可证发布，
+版权归 DesireCore 所有，见根目录 `LICENSE`。
+
+本仓库**包含第三方内容**。以下声明用于履行相应许可证的署名义务。
+
+
+--------------------------------------------------------------------------------
+第三方内容：WecomTeam/wecom-cli 的 Agent Skill
+--------------------------------------------------------------------------------
+
+项目名称    wecom-cli
+来源        https://github.com/WecomTeam/wecom-cli
+许可证      MIT License
+版权        Copyright (c) 2026 WeCom
+pinned commit
+            78c514b2afee7c0d3d7be715628478421f37ee63
+许可证副本  `third_party/wecom-cli/LICENSE`（由 vendor 脚本从上述 commit 原样复制），
+            全文亦逐字附于本文件末尾。
+
+### vendor 范围
+
+`skills/` 下带 `wecomcli-` 前缀的 13 个目录派生自上游 `skills/`，目录名与技能 ID 保持不变：
+
+    wecomcli-calendar     wecomcli-contact      wecomcli-disk
+    wecomcli-doc          wecomcli-doc-manage   wecomcli-email
+    wecomcli-media        wecomcli-meeting      wecomcli-message
+    wecomcli-sheet        wecomcli-smartpage    wecomcli-smartsheet
+    wecomcli-todo
+
+上游第 14 个技能 `wecomcli-shared` **未被 vendor**。它是上游的公共前置技能，
+与本仓库自维护的 `skills/wecom-shared` 职责重合且指令互斥（版本门槛 1.1.0 vs 1.2.0；
+「参数就绪后直接执行、无需确认」vs write-high 复述确认），两套并存会给 Agent 相互冲突的指令。
+
+`skills/` 下不带 `wecomcli-` 前缀的目录（`wecom-shared`、`wecom-chat`、`wecom-workflows` 等）
+是 DesireCore 自行撰写的治理层内容，不属于上游派生作品，仅适用本仓库根目录的 `LICENSE`。
+
+### 我们对上游内容做了哪些修改
+
+上游内容并非原样收录，已按下列 4 类补丁修改。全部补丁以数据形式存放在 `patches/`，
+由 `scripts/vendor-official-skills.sh` 在 vendor 时自动重放；上游发新版时改 pinned commit
+重跑即可，无需人工重做。
+
+1. **公共前置技能引用改指（14 处）**
+   13 个技能正文中所有指向上游 `wecomcli-shared` 的引用，统一改为本仓库自维护的 `wecom-shared`。
+   数据：`patches/skill-renames.tsv`。
+
+2. **修正 `meeting.rooms.search` 的入参名（27 处，跨 5 个文件）**
+   上游文档化的是 wecom-cli 1.2.0 之前的旧参数名，4 个过滤参数错了 3 个：
+   `room_keyword` → `room_name`、`min_capacity` → `capacity_min`、`building_city` → `city_name`
+   （`building_name` 与 `floor_name` 一直正确，未改动）。
+   依据为 wecom-cli 1.2.0 的 `wecom-cli meeting rooms search --schema` 输出。
+   这是静默缺陷——传旧名不报错、后端直接忽略，会导致会议室过滤条件失效而订错房。
+   同时在 `skills/wecomcli-calendar/references/calendar-meeting-room.md` 增加了一条说明修正
+   来源与日期的注记。
+   数据：`patches/param-renames.tsv`、`patches/snippets/wecomcli-calendar.param-fix-note.md`。
+
+3. **补齐 frontmatter 根级字段（13 个技能，共 49 个字段）**
+   DesireCore 的技能更新判定依赖 `SKILL.md` frontmatter 的根级 `version`（semver），
+   而上游 14 个技能中仅 disk / email / media 三个声明了它。为全部 13 个 vendor 技能补齐
+   `version` / `risk_level` / `type` / `status` 四个字段；上游已声明的字段一律保留不覆盖
+   （因此 disk 仍为 1.0.0、email 2.1.0、media 1.0.0，其余填 1.2.0 对齐 CLI 版本）。
+   数据：`patches/frontmatter.tsv`（含每个技能 `risk_level` 取值的判定理由）。
+
+4. **补齐上游未覆盖的 3 个 CLI 方法**
+   上游 13 个技能覆盖 wecom-cli 95 个方法中的 89 个。以下 3 个为 DesireCore 需要而上游零覆盖，
+   已按 wecom-cli 1.2.0 的 `--schema` 逐字段核对后新增章节：
+   - `message.send`（`skills/wecomcli-message`）—— 以授权人身份发纯文本；含实测结论：
+     在 DesireCore 测试企业上返回 `853006`（企业级不可用）。
+   - `message.files.get`（`skills/wecomcli-message`）—— 按 media_id 取回消息中的媒体。
+   - `doc.create`（`skills/wecomcli-doc`）—— 直接新建 doc 文档。
+   新增章节均以「DesireCore 增补」标题标识，与上游原文可区分。
+   数据：`patches/snippets/*.md`、`patches/injections.tsv`。
+
+上述之外，上游内容未作改动。
+
+
+--------------------------------------------------------------------------------
+上游 LICENSE 全文（WecomTeam/wecom-cli @ 78c514b2afee7c0d3d7be715628478421f37ee63）
+--------------------------------------------------------------------------------
+
+MIT License
+
+Copyright (c) 2026 WeCom
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

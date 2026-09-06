@@ -339,7 +339,7 @@ vendor 技能     ${#VENDORED_SKILLS[@]} 个（$total_files 个文件 / $total_l
 已排除          ${EXCLUDED_SKILLS[*]}（与自维护 wecom-shared 互斥，见脚本文件头）
 补丁 3.1        改写公共技能引用 $ref_changes 处 → wecom-shared
 补丁 3.2        修正 rooms search 入参名 $param_changes 处
-补丁 3.2/3.4    注入片段 $inject_count 个（含 2 个 message 方法 + 1 个 doc 方法 + 参数修正注记）
+补丁 3.2/3.4    注入片段 $inject_count 个（含 2 个 message 方法 + 1 个 doc 方法 + 参数修正注记 + 2 条能力边界说明）
 补丁 3.3        为 $fm_skills 个技能补齐 $fm_fields 个 frontmatter 字段
 ─────────────────────────────────────────────
 SUMMARY

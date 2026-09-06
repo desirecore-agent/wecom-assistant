@@ -3,6 +3,8 @@
 #   message.send / message.files.get（wecomcli-message 只写了 message aibot send）
 #   doc.create（wecomcli-doc 刻意只走「生成 .docx → doc import」）
 # 片段参数已按 wecom-cli 1.2.0 的 `--schema` 逐字段核对，见各片段开头的说明。
+# 末尾两条不补方法，是纠正上游说法的边界说明：`smartsheet get` 与 `sheets list` 是别名；
+# 851003 的真实成因是「>10 人企业机器人以独立身份调用、不继承真人权限」而非「写入接口被限制」。
 # 锚点用「定长子串」匹配而非整行相等，以免上游表格对齐空格变动导致误判；
 # 脚本要求锚点在目标文件中**恰好命中 1 行**，命中 0 或 >1 立即 fail closed。
 # 同一锚点的多条注入按本文件自上而下的顺序落位。
@@ -13,3 +15,5 @@ wecomcli-doc.doc-create.md	wecomcli-doc/SKILL.md	before	## 跨技能依赖
 wecomcli-message.scope-row.md	wecomcli-message/SKILL.md	after	并给这些范围中的成员或群聊发送 Markdown 消息、图片、文件、AMR 语音或视频
 wecomcli-message.message-send.md	wecomcli-message/SKILL.md	before	## 关键约束
 wecomcli-message.message-files-get.md	wecomcli-message/SKILL.md	before	## 关键约束
+wecomcli-smartsheet.get-alias.md	wecomcli-smartsheet/references/smart-sheet-read.md	after	仅允许只读 `SELECT`；可重复传入
+wecomcli-smartsheet.identity-mode-note.md	wecomcli-smartsheet/references/smart-sheet-webhook.md	after	这通常意味着企业可见范围超过 10 人，CLI 写入接口被限制

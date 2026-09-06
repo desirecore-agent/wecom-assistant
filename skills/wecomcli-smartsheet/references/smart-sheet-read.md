@@ -39,6 +39,8 @@ wecom-cli smartsheet charts list --json '{"docid": "<docid>", "sheet_title": "<�
 - `--json`：JSON 参数用单引号包裹，`docid` 是 JSON 内部字段，不得作为顶层 shell 参数。
 - `--docid`：仅记录 SQL 查询使用，用单引号包裹。
 - `--sql`：仅允许只读 `SELECT`；可重复传入。SQL 外层用单引号，字段名、子表名和别名用反引号，字符串字面量用双引号。
+- **`smartsheet get` 是 `sheets list` 的别名**，两者官方描述逐字相同、返回同一份子表列表。
+  统一走 `sheets list`，不要在两者之间犹豫，也不要以为 `get` 能拿到 `sheets list` 拿不到的东西。
 
 ## 文档与资源标识
 

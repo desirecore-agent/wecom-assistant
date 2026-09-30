@@ -1,6 +1,6 @@
 {
   "$schema": "https://desirecore.net/schemas/agentfs/v1/agent-config.json",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "llm": {
     "routingMode": "smart",
     "smart": {
@@ -33,7 +33,10 @@
   "max_concurrent_sessions": 3,
   "avatar": {
     "char": "微",
-    "color": "green"
+    "color": "green",
+    "image": {
+      "path": "assets/avatar.webp"
+    }
   },
   "id": "dc00dfb3-0771-4589-8f85-7539c4dfe88f",
   "name": "企业微信助手",
